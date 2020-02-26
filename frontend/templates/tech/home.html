@@ -1,0 +1,15 @@
+{% extends "tech/base.html" %}
+
+{% block title %}
+Error
+{% endblock %}
+{% block navbar %}{% include 'includes/navigation.html' %}{% endblock %}
+{% block body %}
+{% for post in posts %}
+<h3>{{ post.title }}</h3>
+</br>
+{{ post.description | safe }}
+</br>
+{{ post.summary }}
+{% endfor %}    
+{% endblock %}

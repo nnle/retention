@@ -1,0 +1,98 @@
+APP_ROOT = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_FOLDER = os.path.join(APP_ROOT, 'uploads')
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg'}
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def upload(request, lang = 'vn', courseName = None):
+    
+    #print(APP_ROOT)
+    #print(UPLOAD_FOLDER)
+    #print(courseName)
+    try:
+        if lang == 'vn':
+            label_navibar = Navibar.objects.filter(lang = 0) # VN
+        else:
+            label_navibar = Navibar.objects.filter(lang = 1) # EN
+    except Navibar.DoesNotExist:
+        raise Http404("Flight does not exist")
+
+    context = {
+        'label_navibar' : label_navibar,    
+        'vn': lang,
+    }
+    context["courseName"] = courseName 
+    
+    if request.method == 'POST':   
+            
+        target = os.path.join(UPLOAD_FOLDER, courseName)
+        print(target)
+
+        # Create a form instance and populate it with data from the request (binding):
+        form = UploadForm(request.POST)
+        
+
+        if not os.path.isdir(target):
+            os.mkdir(target)
+        else:
+            print("Couldn't create upload directory: {}".format(target))
+        # check if the post request has the file part                
+        for file in request.FILES.getlist("file_ans"):        
+            #file = request.files["file_ans"]
+            print(file.name)
+            # if user does not select file, browser also
+            # submit an empty part without filename
+            
+            if file.name == '':
+                print('No selected file')
+                return HttpResponseRedirect(request.url)
+            
+            if not allowed_file(file.name):
+                print('The extension is not allowed')
+                return HttpResponseRedirect(request.url)
+                    
+            #filename = secure_filename(file.filename)
+            #destination = "/".join([target, filename])
+            
+            destination = os.path.join(target, '_'.join([form.cleaned_data['mssv'],file.name]))
+            #file.save(os.path.join(target, filename))            
+            file.save(destination)
+            print("Image saved")                    
+        
+        filePath = os.path.join(target, dt.datetime.now().year.__str__().join([courseName, '.csv'])) 
+        
+        fieldnames = ['MSSV', 'Email', 'Fullname']
+            
+        if not os.path.isfile(filePath):                
+            with open(filePath, 'w', newline='', encoding="utf8") as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerow({'MSSV': request.form['mssv'], 'Email': form.cleaned_data['email'], 'Fullname':form.cleaned_data['fullname']})
+        else:
+            with open(filePath, 'a', newline='', encoding="utf8") as csvfile:
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                writer.writerow({'MSSV': request.form['mssv'], 'Email': form.cleaned_data['email'], 'Fullname':form.cleaned_data['fullname']})
+        #Sprint(context)                                                                     
+        #return render(request, "tech/upload.html", context = context)
+            
+    else:                
+        form = UploadForm()
+        #if courseName is None:
+            
+        #    return render(request, "error.html", {"message":"No exist the course."})
+        #else: 
+            # Make sure flight cd exists.
+        #    course = Course.objects.filter(coursename=courseName).all()
+            
+        #    if course is None:
+        #        return render(request, "tech/error.html", {"message":"No such flight."})
+         
+        #print(context) 
+
+    context['form'] = form        
+    return render(request, "tech/upload.html", context = context)
+      
+    
+    #return HttpResponse('Hello, World!')

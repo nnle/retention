@@ -1,0 +1,60 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    {%if vn == 'vn' %}
+    <a class="navbar-brand" href="{% url 'index' %}"><img src="{% static 'pictures/icons8-fireplace-48.png' %}" alt="Home Link"  style="width:30px;height:30px;">
+    </a>
+    {% else %}
+    <a class="navbar-brand" href="{% url 'language' 'en' %}"><img src="{% static 'pictures/icons8-fireplace-48.png' %}" alt="Home Link"  style="width:30px;height:30px;"</a>
+    {% endif %}
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mr-auto" >
+        {% for page in label_navibar %}     
+          {%if page.sort == 1 and vn == "en" %}                              
+            <li class="nav-item active"></li>
+            <a class="nav-link" href="{% url 'home' 'en' page.id%}">{{page}} <span class="sr-only">(current)</span></a>
+          </li>
+          {%elif page.sort == 1 and vn == 'vn'%}
+          <li class="nav-item active"></li>
+            <a class="nav-link" href="{% url 'home' page.id %}">{{page}} <span class="sr-only">(current)</span></a>
+          </li>
+          {% else %}          
+          <li class="nav-item"></li>
+          <a class="nav-link" href="#">{{page}}</a>
+          </li>
+          {% endif %}        
+        {% endfor %}                         
+        <li class="nav-item">
+          {%if vn == 'vn' %}          
+          <a class="nav-link" href="{% url 'courses' %}">Courses</a>
+          {% else %}
+          <a class="nav-link" href="{% url 'courses' vn%}">Courses</a>
+          {% endif %}
+        </li>     
+
+        <li class="nav-item">
+          <li class="nav-item">
+            <select class="form-control form-control-sm" onchange="location = this.value;">
+              <option value="{% url 'index' %}" {% if vn == 'vn' %}selected{%endif%}>VN</option>
+              <option value="{% url 'language' 'en' %}" "{% if vn == 'en' %}" selected "{% endif %}" >USA</option>
+            </select>
+          </li>                        
+        </li>
+      </ul>
+    </div>    
+  </nav>
+
+  <!--
+    <li class="nav-item dropdown">
+          <li class="nav-item">
+            <select class="custom-select" onchange="location = this.value;">
+              <option value="{% url 'index' %}">VN</option>
+              <option value="{% url 'courses' %}">USA</option>
+            </select>
+          </li>                        
+        </li>
+  -->
+
+  

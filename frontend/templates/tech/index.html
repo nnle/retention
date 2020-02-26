@@ -1,0 +1,21 @@
+{% extends "tech/base.html" %}
+
+{% block title %}
+    Polytech
+{% endblock %}
+{% block navbar %}
+
+{#{% include 'includes/navigation.html' with pages = ["Home", "Features"].split  %}#}
+
+{% with "Home Features" as list %}
+    {% include 'includes/navigation.html' with pages=label_navibar  %}    
+{% endwith %}
+
+    
+{% endblock %}
+{% block body %}
+    <h1>Hello you!!!</h1>
+    <h2>Upcoming changes</h2>
+
+    
+{% endblock %}
