@@ -63,7 +63,7 @@ def courses(request, lang = 'vn'):
 
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 UPLOAD_FOLDER = os.path.join(APP_ROOT, 'uploads')
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg'}
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg','cpp', '.zip'}
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -112,7 +112,9 @@ def upload(request, lang = 'vn', courseName = None):
             
             destination = os.path.join(target, '_'.join([request.POST['mssv'],file.name]))            
             #print(destination)            
-            path = default_storage.save(destination, ContentFile(file.read()))
+            #path = default_storage.save(destination, ContentFile(file.read()))
+            fs = FileSystemStorage(target)
+            filename = fs.save('_'.join([request.POST['mssv'],file.name]), file)
 
             print("Image saved")                    
          

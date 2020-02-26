@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import tempfile
+# Heroku: Update database configuration from $DATABASE_URL.
+import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -51,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'polytech.urls'
@@ -135,3 +138,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR,'frontend/static/ckeditor/media')
 #CKEDITOR_UPLOAD_URL = '/frontdend/ckuploads/'
 
 #UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
+
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
