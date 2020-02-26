@@ -28,7 +28,7 @@ SECRET_KEY = '4m_=$7io6h+nqjixb%cvri^rx@lxxprvwko@4(sjj#8%oxar!n'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://tranquil-island-16769.herokuapp.com/', '127.0.0.1']
+ALLOWED_HOSTS = ['tranquil-island-16769.herokuapp.com', '127.0.0.1']
 
 
 # Application definition
