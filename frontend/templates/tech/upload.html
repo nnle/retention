@@ -1,12 +1,12 @@
 {% extends "tech/base.html" %}
 
 {% block title %}
-    Upload
+    Upload your exercises
 {% endblock %}
 {% block navbar %}{% include 'includes/navigation.html' %}{% endblock %}
 {% block body %}
-    <h1>Upload</h1>
-    
+    <h1>Upload your file</h1>
+    <br>
     {% if vn == 'en' %}
     <form action="{% url 'upload' vn courseName %}" method="POST" enctype="multipart/form-data" novalidate>
     {% else %}  

@@ -29,10 +29,14 @@ def index(request, lang = 'vn'):
         
     for p in label_navibar:
         p.clean()
+    # Number of visits to this view, as counted in the session variable.
+    num_visits = request.session.get('num_visits', 0)
+    request.session['num_visits'] = num_visits + 1
 
     context = {
         'label_navibar' : label_navibar,
         'vn': lang,
+        'num_visits': num_visits,
     }
     return render(request, "tech/index.html", context = context)
     #return HttpResponse("Hello, world. You're at the polls index.")
